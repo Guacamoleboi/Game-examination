@@ -1,16 +1,12 @@
-/**
- * The Door class represents a connection between two rooms in the game.
- * A door can either be locked or unlocked, restricting the player's movement.
- */
 public class Door {
-    private Room leadsTo; // The room that the door leads to
-    private boolean locked; // Indicates if the door is locked
+  
+    private Room leadsTo; // The room this door leads to
+    private boolean locked; //Indicates whether the door is locked (true = locked, false = unlocked)
 
     /**
      * Constructor to initialize a Door object.
-     *
-     * @param leadsTo The room that the door connects to.
-     * @param locked Indicates if the door is locked or not.
+     * @param leadsTo The room this door connects to.
+     * @param locked Indicates if the door is initially locked.
      */
     public Door(Room leadsTo, boolean locked) {
         this.leadsTo = leadsTo;
@@ -18,37 +14,27 @@ public class Door {
     }
 
     /**
-     * Getter for the room this door leads to.
-     *
-     * @return The connected room.
+     * Getter for the room the door leads to.
+     * @return The Room object this door connects to.
      */
     public Room getLeadsTo() {
         return leadsTo;
     }
-
+    
     /**
-     * Setter to change the room this door leads to.
-     *
-     * @param leadsTo The new room to connect to.
+     * Setter to change the destination of the door.
+     * @param leadsTo The new Room object the door will connect to.
      */
     public void setLeadsTo(Room leadsTo) {
         this.leadsTo = leadsTo;
     }
 
-    /**
-     * Checks if the door is locked.
-     *
-     * @return True if the door is locked, false otherwise.
-     */
+ //Getter for the lock status, true if locked
     public boolean isLocked() {
         return locked;
     }
 
-    /**
-     * Sets the locked status of the door.
-     *
-     * @param locked True to lock the door, false to unlock it.
-     */
+    //Setter to update the lock status of the door.
     public void setLocked(boolean locked) {
         this.locked = locked;
     }
