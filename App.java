@@ -2,7 +2,8 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.Random;
 
-public class App {
+public class DragonTreasure {
+		
     private Player player;
     private ArrayList<Room> rooms;
     private boolean playing = true;
@@ -12,10 +13,16 @@ public class App {
     private static final String CHEST = "chest";
 
     public static void main(String[] args) {
-        App game = new App();
+        DragonTreasure game = new DragonTreasure();
         game.setupGame();
-        game.playGame();
+		game.playGame();
     }
+    
+    
+    
+    
+    
+    
 
     /**
      * Setup the game environment: rooms, doors, and items.
@@ -31,6 +38,7 @@ public class App {
         Room dampRoom = new Room("You enter a damp room with water seeping along the west wall.");
         Room stoneRoom = new Room("You enter a spacious stone room with a beam of light coming through a crack in the east wall.");
         Room chestRoom = new Room("You see a treasure chest full of gold, but it is locked.");
+        Room exitRoom = new Room("You found the dungeons exit, you are safe now.");
 
         // Add rooms to the list
         rooms.add(outside);
@@ -45,33 +53,33 @@ public class App {
         // Outside -> Entrance
         outside.setDoor("e", new Door(entrance, false));
 
-        // Entrance room (4 doors)
+        // Entrance room (2 doors)
         entrance.setDoor("n", new Door(corpseRoom, false));
-        entrance.setDoor("s", new Door(dampRoom, false));
-        entrance.setDoor("e", new Door(torchRoom, false));
-        entrance.setDoor("w", new Door(outside, true)); // The entrance collapsed, you cannot go back.
+        entrance.setDoor("e", new Door(dampRoom, false));
+        
 
-        // Corpse room (3 doors)
+        // Corpse room (2 doors)
         corpseRoom.setDoor("s", new Door(entrance, false));
         corpseRoom.setDoor("e", new Door(torchRoom, false));
 
         // Torch room
         torchRoom.setDoor("w", new Door(corpseRoom, false));
-        torchRoom.setDoor("s", new Door(entrance, false));
-        torchRoom.setDoor("e", new Door(dampRoom, false)); // Circular path
+        torchRoom.setDoor("e", new Door(exitRoom, false));
+        torchRoom.setDoor("s", new Door(dampRoom, false)); 
 
         // Damp room
-        dampRoom.setDoor("n", new Door(entrance, false));
-        dampRoom.setDoor("w", new Door(torchRoom, false));
-        dampRoom.setDoor("e", new Door(chestRoom, true)); // Locked door to the chest room
+        dampRoom.setDoor("n", new Door(torchRoom, false));
+        dampRoom.setDoor("s", new Door(stoneRoom, false)); 
 
         // Stone room
-        stoneRoom.setDoor("n", new Door(torchRoom, false));
-        stoneRoom.setDoor("e", new Door(dampRoom, false));
+        stoneRoom.setDoor("n", new Door(dampRoom, false));
+        stoneRoom.setDoor("e", new Door(chestRoom, true));// Locked door to the chest room
 
         // Chest room
-        chestRoom.setDoor("n", new Door(torchRoom, false));
-        chestRoom.setDoor("w", new Door(dampRoom, false));
+         chestRoom.setDoor("w", new Door(stoneRoom, false));
+         
+         //Exit room
+         exitRoom.setDoor("w", new Door(torchRoom, false));
 
         // Items
         // Place a chest as an item in the chest room
@@ -85,41 +93,23 @@ public class App {
 
         // Initialize the player outside the cave
         player = new Player(outside);
-
-        System.out.println("Welcome to Dragon Treasure!");
-        System.out.println("Type 'q' at any time to quit the game.");
-        System.out.println("(Tip: try 'pick key', 'open chest', etc.)");
-    }
-
-    /**
-     * Main game loop: processes player actions and updates game state.
-     */
-    public void playGame() {
+        
+        // Player set name
         Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter your name adventurer: ");
+        String playerName = scanner.nextLine();
+        player.setName(playerName);
 
-        while (playing) {
-            Room currentRoom = player.getCurrentRoom();
-            displayCurrentState(currentRoom);
-
-            System.out.print("> ");
-            String command = scanner.nextLine().trim().toLowerCase();
-
-            if (command.equals("q")) {
-                System.out.println("You gave up on the adventure. See you next time!");
-                playing = false;
-                break;
-            } else if (command.startsWith("pick ")) {
-                pickItem(command.substring(5), currentRoom);
-            } else if (command.equals("open chest")) {
-                openChest(currentRoom);
-            } else {
-                movePlayer(command);
-            }
-        }
-
-        scanner.close();
+        System.out.println("Welcome to Dragon Treasure, " + player.getName() + "!");
+        System.out.println("Type 'q' at any time to quit the game.");
+     
     }
 
+    
+    
+    //From now on the code is just extra for examination part 2, about items. You do not need to review this part yet if not wanted.
+    
+    
     /**
      * Display the current state of the room, including items and available doors.
      */
@@ -170,7 +160,38 @@ public class App {
             System.out.println("You peek through the keyhole and see a shining treasure inside.");
         }
     }
+    /**
+     * Main game loop: processes player actions and updates game state. For now only the navigation works, and not the pick item. 
+     */
+    public void playGame() {
+        Scanner scanner = new Scanner(System.in);
 
+        while (playing) {
+            Room currentRoom = player.getCurrentRoom();
+            displayCurrentState(currentRoom);
+
+            System.out.print("> ");
+            String command = scanner.nextLine().trim().toLowerCase();
+
+            if (command.equals("q")) {
+                System.out.println("You gave up on the adventure. See you next time!");
+                playing = false;
+                break;
+            } else if (command.startsWith("pick ")) {
+                pickItem(command.substring(5), currentRoom);
+            } else if (command.equals("open chest")) {
+                openChest(currentRoom);
+            } else {
+                movePlayer(command);
+            }
+        }
+
+        scanner.close();
+    }
+
+    
+    //From now on the code is just extra for examination part 2, about items. You do not need to review this part yet if not wanted.
+    
     /**
      * Pick an item from the current room.
      */
@@ -213,4 +234,10 @@ public class App {
             player.setCurrentRoom(nextDoor.getLeadsTo());
         }
     }
+ 
 }
+	
+	
+	
+	
+	
