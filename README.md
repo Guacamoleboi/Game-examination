@@ -15,3 +15,12 @@ Spelaren har en inventarie (ArrayList<Item>) som lagrar de föremål spelaren pl
 
 Obs: Item delen är inte färdig utvecklat än, och antagande om spelaren ska hitta 1 eller 2 nycklar har inte gjorts än.
 
+Exit efter att ha mött draken och tagit skatten // eller hitta utgången någonannanstans??
+Random placera monster, men kanske inte draken (skattrum eller utanför skattrum)??
+1 nyckel endast, till det låsta rummet med skattkistan, dvs inte för skattkistan.
+Grattis meddelande om man hittar utgången och har skatten. If else, exit meddelande. 
+Healing potion, drake, minst 1 monster, 
+Spelaren börjar redan med ett svärd, för ingen vettig hade gått in i en dungeon utan vapen. 
+--Sköld?
+-- super strenght potion 
+-- Börjar utan svärd?
