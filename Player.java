@@ -18,7 +18,15 @@ public class Player {
         this.inventory = new ArrayList<>();
     }
 
-    /**
+        public void setPlayerName(String name) {
+    	this.name = name;
+    }
+    
+    public String getPlayerName() {
+    	return name;
+    }
+    
+   /**
      * Getter for the player's current room.
      * @return The room the player is in.
      */
@@ -33,33 +41,44 @@ public class Player {
     public void setCurrentRoom(Room currentRoom) {
         this.currentRoom = currentRoom;
     }
-
-    /**
-     * Adds an item to the player's inventory.
-     *
-     * @param item The item to add.
-     */
-    public void addItem(Item item) {
-        inventory.add(item);
-    }
-
+  
     
+    // Check if an item exists in the inventory
 	public boolean hasItem(String key) {
 		 for (Item it : inventory) {
-		        if (it.getName().equalsIgnoreCase(key)) {
+		        if (it.getItemName().equalsIgnoreCase(key)) {
 		            return true;
 		        }
 		    }
 		    return false;
 	}
 
-	
-    public void setName(String name) {
-    	this.name = name;
+
+      
+    // Add an item to the inventory
+    public void addItem(Item item) {
+        inventory.add(item);
+        System.out.println("Added " + item.getItemName() + " to your inventory.");
+    }
+
+   
+ // Remove an item from the inventory
+    public void removeItem(Item item) {
+        inventory.remove(item);
+        System.out.println("Removed " + item.getItemName() + " from your inventory.");
     }
     
-    public String getName() {
-    	return name;
-    }
-}
 
+    
+ // List all items in the player's inventory
+    public void listInventory() {
+        if (inventory.isEmpty()) {
+            System.out.println("Your inventory is empty.");
+        } else {
+            System.out.println("Items in your inventory:");
+            for (Item item : inventory) {
+                System.out.println("- " + item.getItemName());
+            }
+        }
+}
+}
