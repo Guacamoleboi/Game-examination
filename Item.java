@@ -6,12 +6,9 @@ public class Item {
     private String name; // The name of the item (e.g., "key", "chest")
     private boolean special; // Indicates if the item has special properties
 
-    /**
-     * Constructor to initialize an Item object.
-     *
-     * @param name The name of the item.
-     * @param special Whether the item is special or not.
-     */
+    
+     // Constructor to initialize an Item object.
+     
     public Item(String name, boolean special) {
         this.name = name;
         this.special = special;
@@ -22,7 +19,7 @@ public class Item {
      *
      * @return The name of the item.
      */
-    public String getName() {
+    public String getItemName() {
         return name;
     }
 
@@ -34,4 +31,26 @@ public class Item {
     public boolean isSpecial() {
         return special;
     }
+    
+    public void useItem(Item item, Room room) {
+        if (item.getItemName().equalsIgnoreCase("key")) {
+            System.out.println("You use the key.");
+            if (room.hasLockedDoor()) {
+                System.out.println("The locked door opens.");
+                room.unlockDoor();
+            } else {
+                System.out.println("There's nothing to unlock here.");
+            }
+        } else if (item.getItemName().equalsIgnoreCase("chest")) {
+            openChest(room);
+        } else {
+            System.out.println("The item has no effect.");
+        }
+    }
+
+	private void openChest(Room room) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
