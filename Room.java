@@ -10,6 +10,7 @@ public class Room {
     private String description; // A brief description of the room
     private Map<String, Door> doors; // Doors connecting to other rooms, mapped by direction
     private ArrayList<Item> items; // Items present in the room
+    private Chest chest; // Add a chest to the room
 
     /**
      * Constructor to initialize a Room object.
@@ -20,6 +21,7 @@ public class Room {
         this.description = description;
         this.doors = new HashMap<>();
         this.items = new ArrayList<>();
+        this.chest = null;  //Initialize with no chest
     }
 
     /**
@@ -98,4 +100,70 @@ public class Room {
     public void removeItem(Item item) {
         items.remove(item);
     }
+    
+    public void listRoomItems(Room room) {
+    	  if (room.getItems().isEmpty()) {
+    	        return;
+    	    }
+
+    	    System.out.println("You see the following items in the room:");
+    	    for (Item item : room.getItems()) {
+    	        System.out.println("- " + item.getItemName());
+    	    }
+    	}
+    
+
+	
+    /**
+     * Checks if the room has any locked doors.
+     *
+     * return True if at least one door is locked, false otherwise.
+     */
+    public boolean hasLockedDoor() {
+		 for (Door door : doors.values()) {
+	            if (door.isLocked()) {
+	                return true;
+	            }
+	        }
+	        return false;
+	}
+
+    /**
+     * Unlocks the first locked door in the room.
+     * @return 
+     *
+     * @return True if a door was unlocked, false otherwise.
+     */
+	public boolean unlockDoor() {
+		  for (Door door : doors.values()) {
+	            if (door.isLocked()) {
+	                door.unlock();
+	                return true;
+	            }
+	        }
+	        return false;
+		
+	}
+
+   
+	 // Set the chest for the room
+    public void setChest(Chest chest) {
+        this.chest = chest;
+    }
+
+    // Get the chest in the room
+    public Chest getChest() {
+        return chest;
+    }
+
+    // Check if the room has a chest
+    public boolean hasChest() {
+        return chest != null;
+    }
 }
+
+
+    
+
+
+
