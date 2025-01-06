@@ -1,84 +1,49 @@
-import java.util.ArrayList;
 
-/**
- * The Player class represents the player in the game.
- * It tracks the player's current room and the inventory of items they carry.
- */
-public class Player {
-	private String name; 
-    private Room currentRoom; // The current room the player is in
-    private ArrayList<Item> inventory; // The player's inventory of items
+public class Door {
+  
+	private Room leadsTo; // The room this door leads to
+    private boolean locked; //Indicates whether the door is locked (true = locked, false = unlocked)
 
-    
-     // Constructor to initialize a Player object.
-   
-    
-    public Player(Room startRoom) {
-        this.currentRoom = startRoom;
-        this.inventory = new ArrayList<>();
-    }
-
-        public void setPlayerName(String name) {
-    	this.name = name;
-    }
-    
-    public String getPlayerName() {
-    	return name;
-    }
-    
-   /**
-     * Getter for the player's current room.
-     * @return The room the player is in.
+    /**
+     * Constructor to initialize a Door object.
+     * @param leadsTo The room this door connects to.
+     * @param locked Indicates if the door is initially locked.
      */
-    public Room getCurrentRoom() {
-        return currentRoom;
+    public Door(Room leadsTo, boolean locked) {
+        this.leadsTo = leadsTo;
+        this.locked = locked;
     }
 
     /**
-     * Setter to update the player's current room.
-     * @param currentRoom The new room to set as the current room.
+     * Getter for the room the door leads to.
+     * @return The Room object this door connects to.
      */
-    public void setCurrentRoom(Room currentRoom) {
-        this.currentRoom = currentRoom;
-    }
-  
-    
-    // Check if an item exists in the inventory
-	public boolean hasItem(String key) {
-		 for (Item it : inventory) {
-		        if (it.getItemName().equalsIgnoreCase(key)) {
-		            return true;
-		        }
-		    }
-		    return false;
-	}
-
-
-      
-    // Add an item to the inventory
-    public void addItem(Item item) {
-        inventory.add(item);
-        System.out.println("Added " + item.getItemName() + " to your inventory.");
-    }
-
-   
- // Remove an item from the inventory
-    public void removeItem(Item item) {
-        inventory.remove(item);
-        System.out.println("Removed " + item.getItemName() + " from your inventory.");
+    public Room getLeadsTo() {
+        return leadsTo;
     }
     
+    /**
+     * Setter to change the destination of the door.
+     * @param leadsTo The new Room object the door will connect to.
+     */
+    public void setLeadsTo(Room leadsTo) {
+        this.leadsTo = leadsTo;
+    }
 
-    
- // List all items in the player's inventory
-    public void listInventory() {
-        if (inventory.isEmpty()) {
-            System.out.println("Your inventory is empty.");
-        } else {
-            System.out.println("Items in your inventory:");
-            for (Item item : inventory) {
-                System.out.println("- " + item.getItemName());
-            }
+ //Getter for the lock status, true if locked
+    public boolean isLocked() {
+        return locked;
+    }
+
+    //Setter to update the lock status of the door.
+    public void setLocked(boolean locked) {
+        this.locked = locked;
+    }
+    public void unlock() {
+        if (locked) {
+            locked = false;
+            System.out.println("The door is now unlocked.");
         }
+    }
 }
-}
+
