@@ -1,4 +1,5 @@
-import java.util.ArrayList;
+	import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 import java.util.Random;
 
@@ -10,7 +11,7 @@ public class DragonTreasure {
 
     // Special item names
     private static final String KEY = "key";
-    private static final String CHEST = "chest";
+  
 
     public static void main(String[] args) {
         DragonTreasure game = new DragonTreasure();
@@ -37,7 +38,25 @@ public class DragonTreasure {
         Room torchRoom = new Room("You see a lit torch in a corner of the room and feel a repulsive odor.");
         Room dampRoom = new Room("You enter a damp room with water seeping along the west wall.");
         Room stoneRoom = new Room("You enter a spacious stone room with a beam of light coming through a crack in the east wall.");
-        Room chestRoom = new Room("You see a treasure chest full of gold, but it is locked.");
+        Room chestRoom = new Room("You see a treasure chest full of gold.  \"                  _.--.\\n\"+\r\n"
+        		+ "            \"              _.-'_:-'||\\n\"+\r\n"
+        		+ "            \"          _.-'_.-::::'||\\n\"+\r\n"
+        		+ "            \"     _.-:'_.-::::::'  ||\\n\"+\r\n"
+        		+ "            \"   .'`-.-:::::::'     ||\\n\"+\r\n"
+        		+ "            \"  /.'`;|:::::::'      ||_\\n\"+\r\n"
+        		+ "            \" ||   ||::::::'      _.;._'-._\\n\"+\r\n"
+        		+ "            \" ||   ||:::::'   _.-!oo @.!-._'-.\\n\"+\r\n"
+        		+ "            \" \\'.  ||:::::.-!() oo @!()@.-'_.||\\n\"+\r\n"
+        		+ "            \"   '.'-;|:.-'.&$@.& ()$%-'o.'\\\\U||\\n\"+\r\n"
+        		+ "            \"     `>'-.!@%()@'@_%-'_.-o _.|'||\\n\"+\r\n"
+        		+ "            \"      ||-._'-.@.-'_.-' _.-o  |'||\\n\"+\r\n"
+        		+ "            \"      ||=[ '-._.-\\\\U/.-'    o |'||\\n\"+\r\n"
+        		+ "            \"      || '-.]=|| |'|      o  |'||\\n\"+\r\n"
+        		+ "            \"      ||      || |'|        _| ';\\n\"+\r\n"
+        		+ "            \"      ||      || |'|    _.-'_.-'\\n\"+\r\n"
+        		+ "            \"      |'-._   || |'|_.-'_.-'\\n\"+\r\n"
+        		+ "            \"      '-._'-.|| |' `_.-'\\n\"+\r\n"
+        		+ "            \"           '-.||_/.-'\\n\");");
         Room exitRoom = new Room("You found the dungeons exit, you are safe now.");
 
         // Add rooms to the list
@@ -48,6 +67,7 @@ public class DragonTreasure {
         rooms.add(dampRoom);
         rooms.add(stoneRoom);
         rooms.add(chestRoom);
+        rooms.add(exitRoom);
 
         // Setting up doors
         // Outside -> Entrance
@@ -81,15 +101,30 @@ public class DragonTreasure {
          //Exit room
          exitRoom.setDoor("w", new Door(torchRoom, false));
 
-        // Items
-        // Place a chest as an item in the chest room
-        chestRoom.addItem(new Item(CHEST, true));
+         Chest treasureChest = new Chest();
+         treasureChest.addItem(new Item("gold", false)); // Add gold to the chest
+         chestRoom.setChest(treasureChest); // Place the chest in the treasure room
 
-        // Place the key randomly in one of the internal rooms (excluding the chest room and entrance)
-        Room[] candidates = { corpseRoom, torchRoom, dampRoom, stoneRoom };
-        Random rand = new Random();
-        int idx = rand.nextInt(candidates.length);
-        candidates[idx].addItem(new Item(KEY, false));
+
+      // Define items to place randomly
+      Item[] itemsToPlace = {
+          new Item(KEY, false),
+         new Item("potion", false)
+      };
+
+      // Define eligible rooms dynamically (excluding specific rooms)
+      List<Room> eligibleRooms = new ArrayList<>(List.of(corpseRoom, torchRoom, dampRoom, stoneRoom));
+
+      // Randomly place items in eligible rooms
+      Random rand = new Random();
+      for (Item item : itemsToPlace) {
+          int idx = rand.nextInt(eligibleRooms.size());
+          eligibleRooms.get(idx).addItem(item);
+      }
+      
+      
+      
+      
 
         // Initialize the player outside the cave
         player = new Player(outside);
@@ -98,9 +133,9 @@ public class DragonTreasure {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Enter your name adventurer: ");
         String playerName = scanner.nextLine();
-        player.setName(playerName);
+        player.setPlayerName(playerName);
 
-        System.out.println("Welcome to Dragon Treasure, " + player.getName() + "!");
+        System.out.println("Welcome to Dragon Treasure, " + player.getPlayerName() + "!");
         System.out.println("Type 'q' at any time to quit the game.");
      
     }
@@ -116,16 +151,6 @@ public class DragonTreasure {
     private void displayCurrentState(Room room) {
         System.out.println("\n" + room.getDescription());
 
-        // Display items in the room
-        if (!room.getItems().isEmpty()) {
-            System.out.print("You see here: ");
-            ArrayList<String> names = new ArrayList<>();
-            for (Item it : room.getItems()) {
-                names.add(it.getName());
-            }
-            System.out.println(String.join(", ", names) + ".");
-        }
-
         // Display available doors
         String directions = room.getAvailableDirections();
         if (!directions.isEmpty()) {
@@ -133,33 +158,7 @@ public class DragonTreasure {
         }
     }
 
-    /**
-     * Attempt to open the chest in the current room.
-     */
-    private void openChest(Room room) {
-        Item chestItem = null;
-        for (Item it : room.getItems()) {
-            if (it.getName().equals(CHEST)) {
-                chestItem = it;
-                break;
-            }
-        }
-
-        if (chestItem == null) {
-            System.out.println("There is no chest here to open.");
-            return;
-        }
-
-        // Check if the player has the key
-        if (player.hasItem(KEY)) {
-            System.out.println("You use the key on the chest and it opens, revealing immense treasure!");
-            System.out.println("Congratulations! You obtained the treasure and escaped the cave alive.");
-            playing = false;
-        } else {
-            System.out.println("You don't have a key that fits the chest.");
-            System.out.println("You peek through the keyhole and see a shining treasure inside.");
-        }
-    }
+  
     /**
      * Main game loop: processes player actions and updates game state. For now only the navigation works, and not the pick item. 
      */
@@ -169,6 +168,7 @@ public class DragonTreasure {
         while (playing) {
             Room currentRoom = player.getCurrentRoom();
             displayCurrentState(currentRoom);
+            interactWithRoom(currentRoom); //  // Allow the player to interact with the room (pick up items)
 
             System.out.print("> ");
             String command = scanner.nextLine().trim().toLowerCase();
@@ -177,14 +177,12 @@ public class DragonTreasure {
                 System.out.println("You gave up on the adventure. See you next time!");
                 playing = false;
                 break;
-            } else if (command.startsWith("pick ")) {
-                pickItem(command.substring(5), currentRoom);
-            } else if (command.equals("open chest")) {
-                openChest(currentRoom);
             } else {
                 movePlayer(command);
             }
         }
+        
+        
 
         scanner.close();
     }
@@ -192,25 +190,94 @@ public class DragonTreasure {
     
     //From now on the code is just extra for examination part 2, about items. You do not need to review this part yet if not wanted.
     
-    /**
-     * Pick an item from the current room.
-     */
-    private void pickItem(String itemName, Room room) {
-        Item found = null;
-        for (Item it : room.getItems()) {
-            if (it.getName().equals(itemName)) {
-                found = it;
-                break;
+   
+    
+    public void interactWithRoom(Room room) {
+        // List all items in the room
+        room.listRoomItems(room);
+        // Interact with the chest, if present
+        interactWithChestInRoom(room);
+
+        // Only prompt the player to pick up an item if the room contains items
+        if (!room.getItems().isEmpty()) {
+      
+        Scanner scanner = new Scanner(System.in);
+        while (true) { // Loop until the player picks a valid item or types 'none'
+            System.out.print("Enter the name of the item to pick up (or type 'none'): ");
+            String itemName = scanner.nextLine();
+
+            if (itemName.equalsIgnoreCase("none")) {
+                System.out.println("You chose not to pick up any items.");
+                break; // Exit the loop if the player chooses 'none'
+            }
+
+            Item foundItem = findItemInRoom(room, itemName);
+            if (foundItem != null) {
+                // Add the item to the player's inventory
+                player.addItem(foundItem);
+                room.removeItem(foundItem);
+                System.out.println("You picked up the " + itemName + ".");
+                break; // Exit the loop after successfully picking up an item
+            } else {
+                System.out.println("That item is not here. Try again.");
             }
         }
+    }
+    }
 
-        if (found == null) {
-            System.out.println("That item is not here.");
-        } else {
-            room.removeItem(found);
-            player.addItem(found);
-            System.out.println("You picked up: " + itemName + ".");
+    
+    public void interactWithChestInRoom(Room room) {
+        // Check if the room has a chest
+        if (room.hasChest()) {
+            Chest chest = room.getChest();
+            chest.open(); // Open the chest (if not already open)
+
+            // Allow the player to pick items from the chest
+            if (!chest.isEmpty()) {
+                Scanner scanner = new Scanner(System.in);
+                while (true) {
+                    System.out.print("Enter the name of the item to pick up from the chest (or type 'none'): ");
+                    String itemName = scanner.nextLine();
+
+                    if (itemName.equalsIgnoreCase("none")) {
+                        System.out.println("You chose not to take anything from the chest.");
+                        break;
+                    }
+
+                    Item item = chest.removeItem(itemName);
+                    if (item != null) {
+                        player.addItem(item);
+                        System.out.println("You picked up the " + item.getItemName() + " from the chest.");
+                        if (chest.isEmpty()) {
+                            System.out.println("The chest is now empty.");
+                            break;
+                        }
+                    } else {
+                        System.out.println("That item is not in the chest. Try again.");
+                    }
+                }
+            } else {
+                System.out.println("The chest is empty.");
+            }
         }
+    }
+
+
+
+    /**
+     * Find an item by name in the room.
+     *
+     * @param room The room to search in.
+     * @param itemName The name of the item to find.
+     * @return The found item, or null if not found.
+     */
+    public Item findItemInRoom(Room room, String itemName) {
+        for (Item item : room.getItems()) {
+            if (item.getItemName().equalsIgnoreCase(itemName)) {
+                return item;
+            }
+        }
+        return null;
     }
 
     /**
@@ -235,9 +302,14 @@ public class DragonTreasure {
         }
     }
  
+   
 }
 	
 	
 	
+	
+	
+
+
 	
 	
