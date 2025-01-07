@@ -18,7 +18,7 @@ Obs: Item delen är inte färdig utvecklat än, och antagande om spelaren ska hi
 Exit efter att hittat skatten - utgången genom skattrummet
 
 Random placera monster, men kanske inte draken (skattrum eller utanför skattrum)??
-1 nyckel endast, till det låsta rummet med skattkistan, dvs inte för skattkistan.
+1 nyckel endast, till det låsta rummet med skattkistan, dvs inte för skattkistan. Skattkistan är redan öppen när man går in i rummet
 Grattis meddelande om man hittar utgången och har skatten. If else, exit meddelande. 
 Healing potion, drake, minst 1 monster, 
 Spelaren börjar redan med ett svärd, för ingen vettig hade gått in i en dungeon utan vapen. 
