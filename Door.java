@@ -1,6 +1,7 @@
+
 public class Door {
   
-    private Room leadsTo; // The room this door leads to
+	private Room leadsTo; // The room this door leads to
     private boolean locked; //Indicates whether the door is locked (true = locked, false = unlocked)
 
     /**
@@ -38,4 +39,11 @@ public class Door {
     public void setLocked(boolean locked) {
         this.locked = locked;
     }
+    public void unlock() {
+        if (locked) {
+            locked = false;
+            System.out.println("The door is now unlocked.");
+        }
+    }
 }
+
